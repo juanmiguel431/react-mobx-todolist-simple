@@ -11,7 +11,7 @@
 // # Print log only once when all todos are completed
 
 
-import { action, autorun, makeObservable, observable } from 'mobx';
+import { action, autorun, computed, makeObservable, observable, reaction } from 'mobx';
 
 class Todo {
   public id: string | null = null;
@@ -37,16 +37,56 @@ class Todo {
   })
 }
 
+class TodoList {
+  public todoList: Todo[] = [];
+
+  constructor() {
+    makeObservable(this, {
+      todoList: observable,
+      completed: computed,
+      pending: computed,
+    });
+  }
+
+  public add = action((todo: Todo) => {
+    this.todoList.push(todo);
+  })
+
+  public remove = action((id: string) => {
+    this.todoList = this.todoList.filter(p => p.id !== id);
+  })
+
+  get completed() {
+    return this.todoList.filter(p => p.isCompleted);
+  }
+
+  get pending() {
+    return this.todoList.filter(p => !p.isCompleted);
+  }
+}
+
+const todoList = new TodoList();
+
+const reactionDisposer = reaction(
+  () => todoList.pending.length === 0 && todoList.completed.length > 0,
+  () => {
+    console.log('Todo list is completed');
+  }
+)
+
+
+
 const todo = new Todo({id: '1', name: 'Task 1'});
 
 const autorunDisposer = autorun(() => {
   console.log(`Todo: id: ${todo.id} name: ${todo.name} completed: ${todo.isCompleted}`);
 });
 
+todoList.add(todo);
 todo.toggleCompletedState();
 
-
 autorunDisposer();
+reactionDisposer();
 
 // to make peace with typescript :D - remove when u start
 export {};
