@@ -28,6 +28,14 @@ store.data.todo.add(id2, 'Task 3');
 
 store.data.user.remove(id1);
 
+const user = store.data.user.getUser(id2);
+
+autorun(() => {
+  console.log(`User name: ${user?.name}`);
+})
+
+user?.updateName('Eduar Paulino')
+
 disposer();
 
 export {};

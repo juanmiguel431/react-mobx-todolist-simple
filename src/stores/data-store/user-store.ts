@@ -15,6 +15,10 @@ export default class UserStore {
     });
   }
 
+  public getUser(id: string) {
+    return this.items.find(u => u.id === id);
+  }
+
   public add(name: string) {
     const user = new ObservableUser(this.rootStore);
     user.name = name;
