@@ -7,9 +7,10 @@ export class ObservableTodo implements Todo {
   public id: number = ++todoId;
   public name: string | null = null;
   public isCompleted: boolean = false;
+  public userId: number;
   private readonly reactionDisposer: IReactionDisposer;
 
-  constructor(name: string) {
+  constructor(name: string, userId: number) {
     makeObservable(this, {
       name: observable,
       isCompleted: observable,
@@ -18,6 +19,7 @@ export class ObservableTodo implements Todo {
     });
 
     this.name = name;
+    this.userId = userId;
 
     this.reactionDisposer = reaction(
       (r) => this.isCompleted,
@@ -73,8 +75,8 @@ export class ObservableTodoList {
     this.reactionDisposer();
   }
 
-  public add = (name: string) => {
-    this.todoList.push(new ObservableTodo(name));
+  public add = (name: string, userId: number) => {
+    this.todoList.push(new ObservableTodo(name, userId));
   }
 
   public getByName = (name: string) => {
