@@ -1,6 +1,6 @@
 import { GlobalView } from '../../../../models/ui';
 import RootStore from '../../../root-store';
-import { makeObservable, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 
 export default class ObservableGlobalView implements GlobalView {
   public theme: string | null = null;
@@ -9,7 +9,17 @@ export default class ObservableGlobalView implements GlobalView {
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeObservable(this, {
-      theme: observable
-    })
+      theme: observable,
+      userCount: computed,
+      todoCount: computed,
+    });
+  }
+
+  get userCount() {
+    return this.rootStore.data.user.items.length;
+  }
+
+  get todoCount() {
+    return this.rootStore.data.todo.items.length;
   }
 }

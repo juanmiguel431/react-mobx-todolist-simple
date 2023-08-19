@@ -2,10 +2,10 @@ import DataStore from './data-store/data-store';
 import UiStore from './ui-store/ui-store';
 
 export default class RootStore {
-  private dataStore: DataStore;
-  private uiStore: UiStore;
+  public data: DataStore;
+  public ui: UiStore;
   constructor() {
-    this.dataStore = new DataStore(this);
-    this.uiStore = new UiStore(this);
+    this.data = new DataStore(this);
+    this.ui = new UiStore(this);
   }
 }

@@ -3,11 +3,11 @@ import UserStore from './user-store';
 import TodoStore from './todo-store';
 
 export default class DataStore {
-  private userStore: UserStore;
-  private todoStore: TodoStore;
+  public user: UserStore;
+  public todo: TodoStore;
 
   constructor(rootStore: RootStore) {
-    this.userStore = new UserStore(rootStore);
-    this.todoStore = new TodoStore(rootStore);
+    this.user = new UserStore(rootStore);
+    this.todo = new TodoStore(rootStore);
   }
 }
