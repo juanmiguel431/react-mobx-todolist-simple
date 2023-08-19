@@ -1,16 +1,16 @@
 import React from 'react';
-import RootStore from '../stores/root-store';
 import { observer, Observer, useObserver } from 'mobx-react';
-
-const store = new RootStore();
-const userId = store.data.user.add('Juan Miguel');
-const todoId = store.data.todo.add(userId, 'Task 1');
-
-const todo = store.data.todo.getById(todoId);
+import createStore from '../stores/helpers/create-store';
 
 type TestProps = {
   title: string;
 }
+
+const store = createStore();
+
+const userId = store.data.user.add('Juan Miguel');
+const todoId = store.data.todo.add(userId, 'Connect MobX to React');
+const todo = store.data.todo.getById(todoId);
 
 class TestClassBase extends React.Component<TestProps> {
 
