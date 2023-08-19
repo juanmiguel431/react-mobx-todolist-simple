@@ -22,5 +22,10 @@ export default class TodoStore {
   public add(userId: string, name: string) {
     const item = new ObservableTodo(name, userId);
     this.items.push(item);
+    return item.id;
+  }
+
+  public getById(id: string) {
+    return this.items.find(t => t.id === id);
   }
 }
