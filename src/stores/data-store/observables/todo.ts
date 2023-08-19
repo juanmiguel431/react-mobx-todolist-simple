@@ -1,16 +1,15 @@
 import { action, computed, IReactionDisposer, makeObservable, observable, reaction, when } from 'mobx';
 import { Todo } from '../../../models/data';
-
-let todoId: number = 0;
+import { v4 as uuidv4 } from 'uuid';
 
 export class ObservableTodo implements Todo {
-  public id: number = ++todoId;
+  public id: string = uuidv4().replace(/-/g, '');
   public name: string | null = null;
   public isCompleted: boolean = false;
-  public userId: number;
+  public userId: string;
   private readonly reactionDisposer: IReactionDisposer;
 
-  constructor(name: string, userId: number) {
+  constructor(name: string, userId: string) {
     makeObservable(this, {
       name: observable,
       isCompleted: observable,
@@ -75,7 +74,7 @@ export class ObservableTodoList {
     this.reactionDisposer();
   }
 
-  public add = (name: string, userId: number) => {
+  public add = (name: string, userId: string) => {
     this.todoList.push(new ObservableTodo(name, userId));
   }
 

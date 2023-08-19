@@ -1,9 +1,10 @@
 import { User } from '../../../models/data';
 import { computed, makeObservable, observable } from 'mobx';
 import RootStore from '../../root-store';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ObservableUser implements User {
-  public id: number = 0;
+  public id: string = uuidv4().replace(/-/g, '');
   public name: string | null = null;
   private rootStore: RootStore;
 

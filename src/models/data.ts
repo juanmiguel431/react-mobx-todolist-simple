@@ -1,11 +1,11 @@
 export type User = {
-  id: number;
+  id: string;
   name: string | null;
 }
 
 export type Todo = {
-  id: number;
+  id: string;
   name: string | null;
   isCompleted: boolean;
-  userId: number;
+  userId: string;
 }

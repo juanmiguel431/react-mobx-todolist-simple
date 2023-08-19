@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import './todo-list';
+// import './todo-list';
+import './store-test';
 
 function App() {
   return (

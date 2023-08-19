@@ -15,11 +15,11 @@ export default class TodoStore {
     })
   }
 
-  public removeRange(userId: number) {
+  public removeRange(userId: string) {
     this.items = this.items.filter(t => t.userId !== userId);
   }
 
-  public add(userId: number, name: string) {
+  public add(userId: string, name: string) {
     const item = new ObservableTodo(name, userId);
     this.items.push(item);
   }

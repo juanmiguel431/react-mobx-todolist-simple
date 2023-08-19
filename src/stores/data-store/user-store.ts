@@ -1,7 +1,6 @@
 import RootStore from '../root-store';
 import { action, makeObservable, observable } from 'mobx';
 import { ObservableUser } from './observables/user';
-import { User } from '../../models/data';
 
 export default class UserStore {
   public items: ObservableUser[] = [];
@@ -15,13 +14,13 @@ export default class UserStore {
     });
   }
 
-  public add(user: User) {
+  public add(name: string) {
     const observableUser = new ObservableUser(this.rootStore);
-    Object.assign(observableUser, user);
+    observableUser.name = name;
     this.items.push(observableUser);
   }
 
-  public remove(id: number) {
+  public remove(id: string) {
     const index = this.items.findIndex(u => u.id === id);
     if (index === -1) return;
 

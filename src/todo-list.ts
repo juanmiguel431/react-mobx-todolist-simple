@@ -20,8 +20,8 @@ const autorunDisposer = autorun(() => {
   // console.log()
 });
 
-todoList.add('Task 1', 1);
-todoList.add('Task 2', 1);
+todoList.add('Task 1', '1');
+todoList.add('Task 2', '1');
 
 const task1 = todoList.getByName('Task 1');
 const task2 = todoList.getByName('Task 2');
