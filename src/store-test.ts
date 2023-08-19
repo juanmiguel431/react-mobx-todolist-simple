@@ -11,10 +11,21 @@
 // and todos we have in total
 
 import RootStore from './stores/root-store';
+import { autorun } from 'mobx';
 
 const store = new RootStore();
-store.data.user.add('Juan Miguel');
-store.data.user.add('Antonio Marte');
 
+const disposer = autorun(() => {
+  console.log( `UserCount: ${store.ui.globalView.userCount} TodoCount: ${store.ui.globalView.todoCount}`);
+});
+
+const id1 = store.data.user.add('Juan Miguel');
+const id2 = store.data.user.add('Antonio Marte');
+
+store.data.todo.add(id1, 'Task 1');
+store.data.todo.add(id1, 'Task 2');
+store.data.todo.add(id2, 'Task 3');
+
+disposer();
 
 export {};

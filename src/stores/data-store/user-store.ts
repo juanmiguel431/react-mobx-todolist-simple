@@ -15,9 +15,10 @@ export default class UserStore {
   }
 
   public add(name: string) {
-    const observableUser = new ObservableUser(this.rootStore);
-    observableUser.name = name;
-    this.items.push(observableUser);
+    const user = new ObservableUser(this.rootStore);
+    user.name = name;
+    this.items.push(user);
+    return user.id;
   }
 
   public remove(id: string) {
