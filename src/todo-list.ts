@@ -10,22 +10,34 @@
 // # Print log every time new todo is added or removed with the current status: total, completed, incomplete
 // # Print log only once when all todos are completed
 
+import { action, autorun, computed, IReactionDisposer, makeObservable, observable, reaction, when } from 'mobx';
 
-import { action, autorun, computed, makeObservable, observable, reaction } from 'mobx';
+let todoId: number = 0;
 
 class Todo {
-  public id: string | null = null;
+  public id: number = ++todoId;
   public name: string | null = null;
   public isCompleted: boolean = false;
+  private readonly reactionDisposer: IReactionDisposer;
 
-  constructor(props: Partial<Todo>) {
-    Object.assign<Todo, Partial<Todo>>(this, props);
-
+  constructor(name: string) {
     makeObservable(this, {
-      id: observable,
       name: observable,
       isCompleted: observable
     });
+
+    this.name = name;
+
+    this.reactionDisposer = reaction(
+      (r) => this.isCompleted,
+      () => {
+        console.log(`Todo ${this.name} is in state ${this.isCompleted}`);
+      }
+    );
+  }
+
+  dispose() {
+    this.reactionDisposer()
   }
 
   public toggleCompletedState = action(() => {
@@ -39,6 +51,7 @@ class Todo {
 
 class TodoList {
   public todoList: Todo[] = [];
+  private readonly reactionDisposer: IReactionDisposer;
 
   constructor() {
     makeObservable(this, {
@@ -46,14 +59,42 @@ class TodoList {
       completed: computed,
       pending: computed,
     });
+
+    this.reactionDisposer = reaction(
+      () => this.todoList.length,
+      () => {
+        console.log(`Todo list change: Total: ${this.todoList.length} Pending: ${this.pending.length} Completed: ${this.completed.length}`);
+      }
+    );
+
+    when(
+      () => this.pending.length === 0 && this.completed.length > 0,
+      () => {
+        console.log('Todo list is completed');
+      }
+    )
   }
 
-  public add = action((todo: Todo) => {
-    this.todoList.push(todo);
+  public dispose() {
+    this.reactionDisposer();
+  }
+
+  public add = action((name: string) => {
+    this.todoList.push(new Todo(name));
   })
 
-  public remove = action((id: string) => {
-    this.todoList = this.todoList.filter(p => p.id !== id);
+  public getByName = (name: string) => {
+    return this.todoList.find(t => t.name === name);
+  }
+
+  public remove = action((name: string) => {
+    const todoIndex = this.todoList.findIndex(p => p.name === name);
+    if (todoIndex === -1) return;
+
+    const todo= this.todoList[todoIndex];
+    todo.dispose();
+
+    this.todoList.splice(todoIndex, 1);
   })
 
   get completed() {
@@ -67,26 +108,28 @@ class TodoList {
 
 const todoList = new TodoList();
 
-const reactionDisposer = reaction(
-  () => todoList.pending.length === 0 && todoList.completed.length > 0,
-  () => {
-    console.log('Todo list is completed');
-  }
-)
-
-
-
-const todo = new Todo({id: '1', name: 'Task 1'});
 
 const autorunDisposer = autorun(() => {
-  console.log(`Todo: id: ${todo.id} name: ${todo.name} completed: ${todo.isCompleted}`);
+  // console.log()
 });
 
-todoList.add(todo);
-todo.toggleCompletedState();
+todoList.add('Task 1');
+todoList.add('Task 2');
+
+const task1 = todoList.getByName('Task 1');
+const task2 = todoList.getByName('Task 2');
+
+if (task1) {
+  task1.toggleCompletedState();
+}
+
+if (task2) {
+  task2.toggleCompletedState();
+}
+
+todoList.remove('Task 1');
 
 autorunDisposer();
-reactionDisposer();
 
 // to make peace with typescript :D - remove when u start
 export {};
