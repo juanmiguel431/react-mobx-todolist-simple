@@ -26,6 +26,8 @@ store.data.todo.add(id1, 'Task 1');
 store.data.todo.add(id1, 'Task 2');
 store.data.todo.add(id2, 'Task 3');
 
+store.data.user.remove(id1);
+
 disposer();
 
 export {};

@@ -11,6 +11,7 @@ export default class UserStore {
     makeObservable(this, {
       items: observable,
       add: action,
+      remove: action,
     });
   }
 
