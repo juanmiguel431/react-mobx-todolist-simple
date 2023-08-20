@@ -2,7 +2,6 @@ import React from 'react';
 import { useStore } from '../stores/helpers/use-store';
 import { Observer, observer } from 'mobx-react';
 import { StoreConsumer } from '../stores/helpers/store-context';
-import RootStore from '../stores/root-store';
 
 type UsingStoreProps = {
   title: string;
